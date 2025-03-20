@@ -65,6 +65,9 @@ Para utilizar o projeto em sua máquina será necessário possuir as seguintes f
 
 [Github](https://github.com/jamile-xavier)
 
+[Linkedin](https://www.linkedin.com/in/jamile-xavier/)
+
 # Licença
 
 MIT
+
