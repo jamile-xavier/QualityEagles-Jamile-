@@ -58,6 +58,7 @@ Para utilizar o projeto em sua máquina será necessário possuir as seguintes f
 - Clicar em File;
 - Open Folder;
 - Selecionar pasta;
+- Abrir o terminal e digitar o comando: robot -d log .\api.robot
 
 # Autora
 
