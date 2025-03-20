@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0d3524d8-ee2c-40f0-9b2d-7d0de5d692be",
+		"_postman_id": "b93d64c7-355e-4ad8-b4a4-35bc4e7e1b54",
 		"name": "QualityEagles[Jamile]",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23226959"
@@ -4891,8 +4891,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status Code is 201\", () => {\r",
-									"    pm.response.to.have.status(201)\r",
+									"pm.test(\"Status Code is 200\", () => {\r",
+									"    pm.response.to.have.status(200)\r",
 									"})\r",
 									"\r",
 									"pm.test(\"Verify msg is valid\", function () {\r",
@@ -5015,12 +5015,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/company/{{CompanyId}}",
+							"raw": "{{BaseUrl}}/company/address/{{CompanyId}}",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"company",
+								"address",
 								"{{CompanyId}}"
 							]
 						}
@@ -5144,12 +5145,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/company/{{CompanyId}}",
+							"raw": "{{BaseUrl}}/company/address/{{CompanyId}}",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"company",
+								"address",
 								"{{CompanyId}}"
 							]
 						}
@@ -5273,12 +5275,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/company/{{CompanyId}}",
+							"raw": "{{BaseUrl}}/company/address/{{CompanyId}}",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"company",
+								"address",
 								"{{CompanyId}}"
 							]
 						}
@@ -5292,9 +5295,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status Code is 201\", () => {\r",
-									"    pm.response.to.have.status(201)\r",
-									"})\r",
+									"/*pm.test(\"Status Code is 200\", () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})*/\r",
 									"\r",
 									"pm.test(\"Check msg is true\", () => {\r",
 									"    pm.expect(pm.globals.get(\"UpdateCompanyOk\")).to.equal(pm.response.json().msg)\r",
@@ -5347,12 +5350,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/company/{{CompanyId}}",
+							"raw": "{{BaseUrl}}/company/status/{{CompanyId}}",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"company",
+								"status",
 								"{{CompanyId}}"
 							]
 						}
@@ -5366,9 +5370,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status Code is 201\", () => {\r",
-									"    pm.response.to.have.status(201)\r",
-									"})\r",
+									"/*pm.test(\"Status Code is 200\", () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})*/\r",
 									"\r",
 									"pm.test(\"Check msg is true\", () => {\r",
 									"    pm.expect(pm.globals.get(\"UpdateCompanyOk\")).to.equal(pm.response.json().msg)\r",
@@ -5421,12 +5425,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/company/{{CompanyId}}",
+							"raw": "{{BaseUrl}}/company/status/{{CompanyId}}",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"company",
+								"status",
 								"{{CompanyId}}"
 							]
 						}
@@ -5440,9 +5445,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"/*pm.test(\"Status code is 400\", function () {\r",
+									"pm.test(\"Status code is 400\", function () {\r",
 									"    pm.response.to.have.status(400);\r",
-									"})*/\r",
+									"})\r",
 									"\r",
 									"pm.test(\"Verify msg error\", function () {\r",
 									"    pm.expect(pm.response.json().error);\r",
@@ -5483,12 +5488,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/company/{{CompanyIdInvalid}}",
+							"raw": "{{BaseUrl}}/company/status/{{CompanyIdInvalid}}",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"company",
+								"status",
 								"{{CompanyIdInvalid}}"
 							]
 						}
@@ -5502,9 +5508,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"/*pm.test(\"Status code is 403\", function () {\r",
+									"pm.test(\"Status code is 403\", function () {\r",
 									"    pm.response.to.have.status(400);\r",
-									"})*/\r",
+									"})\r",
 									"\r",
 									"pm.test(\"Verify msg errors\", function () {\r",
 									"    pm.expect(pm.response.json().errors);\r",
@@ -5545,12 +5551,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/company/{{CompanyId}}",
+							"raw": "{{BaseUrl}}/company/status/{{CompanyId}}",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"company",
+								"status",
 								"{{CompanyId}}"
 							]
 						}
