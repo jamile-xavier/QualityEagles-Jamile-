@@ -9,9 +9,9 @@ Teste API ERP
 <p align="center">Testes de endpoints: Login, Users e Company</p>
 <p align="center"> Realização de testes de sucesso e alguns de exceção dos endpoints mencionados.</p>
 <p align="center"> Utilização de variáveis globais para realização dos testes e criação de variáveis dinâmicas.</p>
-<p align="center">Para realização dos testes foi utilizado os casos de testes e critérios de aceites disponibilizados pela Qa Coders atravpes do Azure e também os endpoints disponibilizados através do Swagger.</p>
+<p align="center">Para realização dos testes foi utilizado os casos de testes e critérios de aceites disponibilizados pela Qa Coders através do Azure e também os endpoints disponibilizados através do Swagger.</p>
 <p align="center"> O Azure também foi utilizado para abertura das PBI´s, Test Plan Suite e Test Pan.</p>
-<p align="center"> Todos os testes aqui disponibilizados são testes que não apresentam bugs (exceto bugs de status code que são testes que não apresentam falha na execução porém ainda necessita de correção pelos Devs. Os testes que apresentaram falha na execução não foram adicionados por enquanto na collection.</p>
+<p align="center"> Todos os testes aqui disponibilizados são testes que não apresentam bugs. 
 
 
 # Sumário
