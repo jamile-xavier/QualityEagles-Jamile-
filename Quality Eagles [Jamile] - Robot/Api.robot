@@ -61,6 +61,7 @@ TC02 - Realizar login com sucesso User
 
     #Validação e-mail
     Should Be Equal As Strings    ${MAIL_USER}    ${response.json()["user"]["mail"]}
+
 TC03 - Realizar login com senha inválida
     [Documentation]    Realizar login com a senha inválida e o e-mail válido
     ${response}     Realizar login    email=${MAIL_ADMIN}    senha=1234@Tes
@@ -82,12 +83,13 @@ TC05 - Realizar login com email e senha inválidos
 TC06 - Realizar login com e-mail em branco
     [Documentation]    Realizar login com o e-mail em branco e a senha válida
     ${response}     Realizar login    email=       senha=${PASSWORD_ADMIN}
-    Status Should Be    500    ${response}
+    Status Should Be    400    ${response}
     Should Be Equal    first=O campo e-mail é obrigatório.    second=${response.json()["mail"]}
+
 TC07 - Realizar login com a senha em branco
     [Documentation]    Realizar login com o e-mail válido e a senha em branco
     ${response}     Realizar login    email=${MAIL_ADMIN}    senha=
-    Status Should Be    500    ${response}
+    Status Should Be    400    ${response}
     Should Be Equal    first=O campo senha é obrigatório.    second=${response.json()["password"]}
 
 TC08 - Realizar login com e-mail e senha em branco
@@ -104,7 +106,7 @@ TC09 - Cadastro de usuário com sucesso
     ${person}        Get Fake Person
     ${response}      Criar usuario    ${person}
 
-    #Should Be Equal As Strings    ${response.status_code}    201
+    Should Be Equal As Strings    ${response.status_code}    201
 
     #Validar campos
     ${user_data}    Set Variable    ${response.json()["user"]}
@@ -125,7 +127,6 @@ TC10 - Cadastrar usuário com nome com mais de 100 caracteres
     ...    password=5qLPT$6vpPfj
     ...    confirmPassword= 5qLPT$6vpPfj
     Status Should Be    400    ${response}
-    #Should Be Equal    first=O nome completo deve ter no máximo 100 caracteres.    second=${response.json()["error"]}
 
 TC11 - Cadastrar usuário com espaço no e-mail
     [Documentation]    Cadastrar usuário com espaço entre o nome e sobrenome no e-mail
@@ -136,7 +137,7 @@ TC11 - Cadastrar usuário com espaço no e-mail
     ...    password=5qLPT$6vpPfj
     ...    confirmPassword= 5qLPT$6vpPfj
     Status Should Be    400    ${response}
-    #Should Be Equal    first=O e-mail informado é inválido. Informe um e-mail no formato [nome@domínio.com].    second=${response.json()["error"]}
+    Should Be Equal As Strings   ${response.json()["error"][1]}    O e-mail informado é inválido. Informe um e-mail no formato [nome@domínio.com]. 
 
 TC12 - Cadastrar usuário com senha inválida
     [Documentation]    Cadastrar usuário com um e-mail inválido
@@ -147,8 +148,6 @@ TC12 - Cadastrar usuário com senha inválida
     ...    password=5qLPT6vpPfj
     ...    confirmPassword= 5qLPT6vpPfj
     Status Should Be    400    ${response}
-    #Should Be Equal    first=Senha precisa ter: uma letra maiúscula, uma letra minúscula, um número, um caractere especial(@#$%) e tamanho entre 8-12.    second=${response.json()["error"]}
-
 
 TC13 - Cadastrar usuário com e-mail inválido
     [Documentation]    Cadastrar usuário com um e-mail inválido
@@ -159,7 +158,7 @@ TC13 - Cadastrar usuário com e-mail inválido
     ...    password=5qLPT$6vpPfj
     ...    confirmPassword= 5qLPT$6vpPfj
     Status Should Be    400    ${response}
-    #Should Be Equal    first=O e-mail informado é inválido. Informe um e-mail no formato [nome@domínio.com].   second=${response.json()["error"]}
+    Should Be Equal As Strings   ${response.json()["error"][1]}    O e-mail informado é inválido. Informe um e-mail no formato [nome@domínio.com]. 
 
 
 TC14 - Cadastrar usuário com CPF em branco
@@ -171,7 +170,7 @@ TC14 - Cadastrar usuário com CPF em branco
     ...    password=5qLPT$6vpPfj
     ...    confirmPassword= 5qLPT$6vpPfj
     Status Should Be    400    ${response}
-    #Should Be Equal    first=O campo CPF é obrigatório!   second=${response.json()["error"]}
+    Should Be Equal As Strings   ${response.json()["error"][2]}    Deve preencher o CPF com 11 dígitos
 
 TC15 - Exclusão de usuário com sucesso
     [Documentation]    Deletar um usuário existente
@@ -181,20 +180,20 @@ TC15 - Exclusão de usuário com sucesso
     # Deletar usuário
     ${response}      Deletar usuario    ${user_id}
 
-    # Validações3
-    #Status Should Be    200    ${response}
-    Should Be Equal    Usuário deletado com sucesso!.    ${response["msg"]}
+    # Validações
+    Status Should Be    200   
+    Should Be Equal    Usuário deletado com sucesso!.    ${response["msg"]}  
 
 TC16 - Exclusão de usuário com id inválido
     [Documentation]     Validar acesso negado à exclusão de usuários informando um id inválido
     ${response}=    DELETE On Session    alias=quality-eagles    url=/${USER}/${INVALID_USER_ID}?token=${TOKEN_USER}   expected_status=any
-    Status Should Be    400
+    Status Should Be    400    ${response}
     Should Be Equal As Strings   ${response.json()["alert"][0]}    Esse usuário não existe em nossa base de dados.
 
 TC17 - Exclusão de usuário com token em branco
     [Documentation]     Validar acesso negado à exclusão de usuários com token em branco
     ${response}=    DELETE On Session    alias=quality-eagles    url=/${USER}/${VALID_USER_ID}?token=${TOKEN_BLANK}   expected_status=any
-    Status Should Be    403
+    Status Should Be    403     ${response}
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.
 
 TC18 - Listagem de usuário com sucesso
@@ -222,6 +221,7 @@ TC19 - Listagem de usuário com token inválido
     ${response}=    GET On Session    alias=quality-eagles    url=/${USER}/${VALID_USER_ID}?token=${TOKEN_INVALID}   expected_status=any
     Status Should Be    403
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.
+
 TC20 - Listagem de usuário com token em branco
     [Documentation]     Validar acesso negado à listagem de usuários com token em branco
     ${response}=   GET On Session    alias=quality-eagles    url=/${USER}/${VALID_USER_ID}?token=${TOKEN_BLANK}    expected_status=any
@@ -301,16 +301,6 @@ TC28 - Atualização de cadastro sem nome completo
     ...    mail=isabelaoliveira_0037fbf4-241a-4852-bdf1-19723cb0aab3@qacoders.com.br
     Status Should Be    400    ${response}
     Should Be Equal    ${response.json()["error"][0]}    Informe o nome e sobrenome com as iniciais em letra maiúscula e sem caracteres especiais.
-#TC25 - Atualização de cadastro sem e-mail
-    #[Documentation]    Tentar atualizar usuário sem nome completo
-    #[Tags]    usuario_atualizacao
-    #${person}    Get Fake Person
-    #${response}    Cadastro Sucesso
-    #${user_id}    Set Variable    ${response.json()["user"]["_id"]}
-    #${headers}    Create Dictionary    accept=application/json    Content-Type=application/json
-    #${body}    Create Dictionary    fullName=${person}[fullName]    mail=""
-    #${response}    PUT On Session    alias=quality-eagles    url=/user/${user_id}?token=${token}    json=${body}    headers=${headers}
-    #Status Should Be    400    ${response}
 
 TC29 - Atualização de cadastro sem email
     [Documentation]     Validar acesso negado à atualização de cadastro sem informar o e-mail
@@ -318,7 +308,7 @@ TC29 - Atualização de cadastro sem email
     ...    fullName=Isabella Oliveira
     ...    mail=
     Status Should Be    400    ${response}
-   #Should Be Equal    ${response.json()["error"][0]}    O campo e-mail é obrigatório.
+    Should Be Equal    ${response.json()["error"][1]}    O e-mail informado é inválido. Informe um e-mail no formato [nome@domínio.com].
 
 TC30 - Atualização de senha por id com sucesso
     [Documentation]    Atualizar senha do usuário utilizando seu id
@@ -335,6 +325,7 @@ TC31 - Atualização de senha por id com id inválido
     [Documentation]     Validar acesso negado à atualização de senha com id inválido
     ${body}    Create Dictionary    password=9qJNsMDL75#A    confirmPassword=9qJNsMDL75#A
     ${response}    PUT On Session    alias=quality-eagles    url=/${USER_PASSWORD}/${INVALID_USER_ID}?token=${TOKEN_USER}    expected_status=any   
+    Status Should Be    400
     Should Be Equal    ${response.json()["msg"]}    Esse usuário não existe em nossa base de dados.
 
 TC32 - Atualização de senha por id com token em branco
@@ -427,7 +418,7 @@ TC39 - Cadastrar empresa sem nome da empresa
     ...    mail=test@newtest.com
 
     Status Should Be    400    ${response}
-    #Should Be Equal    ${response.json()['error'][0]}    ValidationError: corporateName: O campo 'corporateName' é obrigatório.
+    Should Be Equal    ${response.json()['error'][0]}    O campo 'Nome da empresa' da empresa é obrigatório
 
 TC40 - Cadastrar empresa sem o CNPJ
     [Documentation]     Validar acesso negado à cadastro de empresa sem informar o cnpj
@@ -449,7 +440,7 @@ TC41 - Cadastrar empresa sem email
     Status Should Be    400    ${response}
     Should Be Equal    ${response.json()['error'][0]}    O campo 'Email' é obrigatório.
 
-TC41 - Exclusão de empresa com sucesso
+TC42 - Exclusão de empresa com sucesso
     [Documentation]    Deletar uma empresa existente
     ${response}    Cadastro Empresa Sucesso        
     ${company_id}       Set Variable    ${response.json()["newCompany"]["_id"]}
@@ -457,22 +448,22 @@ TC41 - Exclusão de empresa com sucesso
     # Deletar usuário
     ${response}      Deletar empresa    ${company_id}
 
-    # Validações3
-    #Status Should Be    200    ${response}
+    # Validações
+    Status Should Be    200    
     Should Be Equal   Companhia deletado com sucesso.    ${response["msg"]}
 
-TC42 - Exclusão de empresa com id inválido
+TC43 - Exclusão de empresa com id inválido
     [Documentation]     Validar acesso negado à exclusão de empresa informando um id inválido
     ${response}=    DELETE On Session    alias=quality-eagles    url=/${COMPANY}/${INVALID_COMPANY_ID}?token=${TOKEN_USER}   expected_status=any
-    #Status Should Be    404
+    #Status Should Be    404   ${response}
     #Should Be Equal As Strings   ${response.json()["msg"]}    Essa companhia não existem em nossa base de dados.
 
-TC43 - Exclusão de empresa com token inválido
+TC44 - Exclusão de empresa com token inválido
     [Documentation]     Validar acesso negado à exclusão de empresa informando um token inválido
     ${response}=    DELETE On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_INVALID}   expected_status=any
     Status Should Be    403
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.
-TC44 - Listagem de empresa com sucesso
+TC45 - Listagem de empresa com sucesso
     [Documentation]    Listar todas as empresas cadastradas
     ${response}    GET On Session    alias=quality-eagles    url=/${COMPANY}/?token=${TOKEN_USER}
     Status Should Be    200    ${response}
@@ -491,26 +482,26 @@ TC44 - Listagem de empresa com sucesso
     Dictionary Should Contain Key    ${first_company}    mail
     Dictionary Should Contain Key    ${first_company}    telephone
 
-TC45 - Listagem de empresa com token inválido
+TC46 - Listagem de empresa com token inválido
     [Documentation]     Validar acesso negado à listagem de empresa por id com um token inválido
     ${response}=    GET On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_INVALID}   expected_status=any
     Status Should Be    403
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.
 
-TC46 - Listagem de empresa com token em branco
+TC47 - Listagem de empresa com token em branco
     [Documentation]     Validar acesso negado à listagem de empresa por id com um token inválido
     ${response}=    GET On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_BLANK}   expected_status=any
     Status Should Be    403
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.    
 
-TC47 - Contagem de empresa com sucesso
+TC48 - Contagem de empresa com sucesso
     [Documentation]    Realizar a contagem de todas as empresas cadastradas
     ${response}    GET On Session    alias=quality-eagles    url=/${COMPANY_COUNT}/?token=${TOKEN_USER}
     Status Should Be    200    ${response}
     # Validar conteúdo da resposta
     Dictionary Should Contain Key   ${response.json()}    count
 
-TC48 - Contagem de empresa com token inválido
+TC49 - Contagem de empresa com token inválido
     [Documentation]     Validar acesso negado à contagem de empresa com o token inválido
     ${response}=    GET On Session    alias=quality-eagles    url=/${COMPANY_COUNT}?token=${TOKEN_INVALID}   expected_status=any
     Status Should Be    403
@@ -518,14 +509,15 @@ TC48 - Contagem de empresa com token inválido
     Log To Console    ${response.json()["errors"][0]}
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.
 
-TC49 - Contagem de empresa com token em branco
+TC50 - Contagem de empresa com token em branco
     [Documentation]     Validar acesso negado à contagem usuários com o token inválido
     ${response}=    GET On Session    alias=quality-eagles    url=/${USER_COUNT}?token=${TOKEN_BLANK}   expected_status=any
     Status Should Be    403
     Log    GET Count Users Response: ${response}
     Log To Console    ${response.json()["errors"][0]}
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.
-TC50 - Atualização de cadastro da empresa por id com sucesso
+
+TC51 - Atualização de cadastro da empresa por id com sucesso
     [Documentation]    Atualizar dados básicos da empresa - Responsável
     ${company_fake}    Get Fake Company
     ${response}    Cadastro Empresa Sucesso
@@ -533,7 +525,7 @@ TC50 - Atualização de cadastro da empresa por id com sucesso
     ${headers}    Create Dictionary    accept=application/json    Content-Type=application/json
     ${body}    Create Dictionary    corporateName=${response.json()["newCompany"]["corporateName"]}    registerCompany=${response.json()["newCompany"]["registerCompany"]}     mail=${response.json()["newCompany"]["mail"]}     matriz=Teste    responsibleContact= Marcio Freitas    telephone=${response.json()["newCompany"]["telephone"]}    serviceDescription=Teste 
     ${response}    PUT On Session    alias=quality-eagles    url=/${COMPANY}/${company_id}?token=${TOKEN_USER}    json=${body}    headers=${headers}
-    Should Be Equal As Strings    ${response.status_code}    201
+    Should Be Equal As Strings    ${response.status_code}    200
     Should Be Equal    ${response.json()["msg"]}    Companhia atualizada com sucesso.
     # Validar campos atualizados
     ${updated_company}    Set Variable    ${response.json()["updatedCompany"]}
@@ -547,13 +539,43 @@ TC50 - Atualização de cadastro da empresa por id com sucesso
     Log To Console    Responsável atualizado: ${updated_company["responsibleContact"]}
     Log To Console    Dados da empresa atualizada: ${response.json()}
 
-TC51 - Atualização de cadastro da empresa por id com token inválido
+TC52 - Atualização de cadastro da empresa por id com token inválido
     [Documentation]     Validar acesso negado à atualização de cadastro da empresa por id com um token inválido
     ${response}=    PUT On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_INVALID}   expected_status=any
     Status Should Be    403
     Should Be Equal As Strings   ${response.json()["errors"][0]}    Failed to authenticate token.
+    
 
-TC52 - Atualização de endereço da empresa com sucesso
+TC53 - Atualização de cadastro da empresa por id com todos os campos em branco
+    [Documentation]     Validar acesso negado à atualização de cadastro da empresa por id com todos os campos em branco
+    ${response}=    PUT On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_USER}   expected_status=any
+    Status Should Be    400
+    Should Be Equal As Strings   ${response.json()["error"][0]}    O campo 'Nome da empresa' da empresa é obrigatório
+    Should Be Equal As Strings   ${response.json()["error"][1]}    O campo 'Email' é obrigatório.
+    Should Be Equal As Strings   ${response.json()["error"][2]}    O campo 'CNPJ' da empresa é obrigatório.
+    Should Be Equal As Strings   ${response.json()["error"][3]}    O campo 'Contado do Responsável' é obrigatório.
+    Should Be Equal As Strings   ${response.json()["error"][4]}    O campo 'Telefone' é obrigatório.
+    Should Be Equal As Strings   ${response.json()["error"][5]}    O campo 'Descrição' é obrigatório.
+
+TC54 - Atualização de cadastro da empresa por id com o cnpj em branco
+    [Documentation]     Validar acesso negado à atualização de cadastro da empresa por id com o cnpj em branco
+    ${response}=    PUT On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_USER}    expected_status=any
+    Status Should Be    400
+    Should Be Equal As Strings   ${response.json()["error"][2]}    O campo 'CNPJ' da empresa é obrigatório.
+
+TC55 - Atualização de cadastro da empresa por id com o e-mail em branco
+    [Documentation]     Validar acesso negado à atualização de cadastro da empresa por id com o e-mail em branco
+    ${response}=    PUT On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_USER}    expected_status=any
+    Status Should Be    400
+    Should Be Equal As Strings   ${response.json()["error"][1]}    O campo 'Email' é obrigatório.
+
+TC56 - Atualização de cadastro da empresa por id com o telefone em branco
+    [Documentation]     Validar acesso negado à atualização de cadastro da empresa por id com o telefone em branco
+    ${response}=    PUT On Session    alias=quality-eagles    url=/${COMPANY}/${VALID_COMPANY_ID}?token=${TOKEN_USER}    expected_status=any
+    Status Should Be    400
+    Should Be Equal As Strings   ${response.json()["error"][4]}    O campo 'Telefone' é obrigatório.
+
+TC57 - Atualização de endereço da empresa com sucesso
     [Documentation]    Atualizar o endereço da empresa
     ${company_fake}    Get Fake Company
     ${response}    Cadastro Empresa Sucesso
@@ -580,29 +602,31 @@ TC52 - Atualização de endereço da empresa com sucesso
     ...    serviceDescription=${response.json()["newCompany"]["serviceDescription"]}
     ...    address=${address}
     ${response}    PUT On Session    alias=quality-eagles    url=/${COMPANY_ADDRESS}/${company_id}?token=${TOKEN_USER}    json=${body}    headers=${headers}
-    Should Be Equal As Strings    ${response.status_code}    201
+    Should Be Equal As Strings    ${response.status_code}    200
     Should Be Equal    ${response.json()["msg"]}    Endereço da companhia atualizado com sucesso.
     
      # Validar campos atualizados
     Dictionary Should Contain Key     ${response.json()["updateCompany"]}    address
 
-TC53 -Atualização de status por id para false com sucesso
+TC58 -Atualização de status por id para false com sucesso
     [Documentation]    Atualizar o status para false utilizando o id do usuário
       ${company_fake}    Get Fake Company
     ${response}    Cadastro Empresa Sucesso
     ${company_id}    Set Variable    ${response.json()["newCompany"]["_id"]}
     ${response}      Atualizar status da empresa    company_id=${company_id}    status=false
+    #Status Should Be    200
     Should Be Equal    ${response['msg']}    Status da companhia atualizado com sucesso.
 
-TC54 - Atualização de status por id para true com sucesso
+TC59 - Atualização de status por id para true com sucesso
     [Documentation]    Atualizar o status para true utilizando o id do usuário
       ${company_fake}    Get Fake Company
     ${response}    Cadastro Empresa Sucesso
     ${company_id}    Set Variable    ${response.json()["newCompany"]["_id"]}
     ${response}      Atualizar status da empresa   company_id=${company_id}    status=true
+    #Status Should Be    200
     Should Be Equal    ${response['msg']}    Status da companhia atualizado com sucesso.
    
-TC55 - Atualização de status por id com id inválido 
+TC60 - Atualização de status por id com id inválido 
     [Documentation]     Validar acesso negado à atualizção de status da empresa com ID inválido
     ${headers}     Create Dictionary
     ...     accept=application/json
@@ -620,7 +644,7 @@ TC55 - Atualização de status por id com id inválido
 
     #Should Be Equal    ${response['alert'][0]}    Essa companhia não existe em nossa base de dados.
 
-TC56 - Atualização de status por id com token em branco
+TC61 - Atualização de status por id com token em branco
     [Documentation]     Validar acesso negado à atualizção de status da empresa com ID inválido
     ${headers}     Create Dictionary
     ...     accept=application/json
@@ -672,7 +696,7 @@ Criar usuario
                      ...    alias=quality-eagles
                      ...    url=/${USER}/?token=${TOKEN_USER}
                      ...    json=${body}
-                     ...    expected_status=500  #alterar para 201 após correção do bug
+                     ...    expected_status=201  
 
     RETURN           ${response}
 
