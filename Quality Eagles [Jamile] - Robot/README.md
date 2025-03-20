@@ -64,3 +64,7 @@ Para utilizar o projeto em sua máquina será necessário possuir as seguintes f
 <p> Jamile Xavier Mendonça </p>
 
 [Github](https://github.com/jamile-xavier)
+
+# Licença
+
+MIT
